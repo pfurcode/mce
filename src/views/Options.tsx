@@ -7,6 +7,7 @@ import {
   FormGroup,
   FormControlLabel,
   Switch,
+  Divider,
 } from '@mui/material';
 import { DataService } from '../services/DataService';
 import type { AppSettings } from '../types/settings';
@@ -21,7 +22,7 @@ export const Options: React.FC = () => {
     DataService.getSettings().then(setSettings);
   }, []);
 
-  // Type-safe handler for modules with an 'enabled' property
+  // Handler for module toggles (re-added)
   const handleModuleToggle = (moduleName: 'openTabsList' | 'newTab') => (event: React.ChangeEvent<HTMLInputElement>) => {
     if (!settings) return;
     const newSettings = {
@@ -31,8 +32,8 @@ export const Options: React.FC = () => {
     setSettings(newSettings);
     DataService.saveSettings(newSettings);
   };
-
-  const handleActionChange = (actionName: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
+  
+  const handleActionChange = (actionName: keyof AppSettings['openTabsList']['actions']) => (event: React.ChangeEvent<HTMLInputElement>) => {
     if (!settings) return;
     const newSettings = {
       ...settings,
@@ -50,22 +51,47 @@ export const Options: React.FC = () => {
   return (
     <Container maxWidth="md" sx={{ mt: 4 }}>
       <Typography variant="h4" component="h1" gutterBottom>{t('settingsTitle')}</Typography>
-      <SettingsModuleCard /* ...props remain the same */ >
+      
+      {/* The SettingsModuleCard now receives the enabled and onToggle props */}
+      <SettingsModuleCard
+        title={settings.openTabsList.title}
+        description={t(settings.openTabsList.descriptionKey)}
+        version={settings.openTabsList.version}
+        enabled={settings.openTabsList.enabled}
+        onToggle={handleModuleToggle('openTabsList')}
+      >
         <FormGroup>
-          {/* Add the new Switch for tab grouping */}
+          <Divider sx={{ my: 1 }} />
           <FormControlLabel
             control={
               <Switch
-                checked={settings.openTabsList.behavior.enableTabGrouping}
-                onChange={handleBehaviorChange('enableTabGrouping')}
+                checked={settings.openTabsList.actions.showCopyUrl}
+                onChange={handleActionChange('showCopyUrl')}
                 disabled={!settings.openTabsList.enabled}
               />
             }
-            label={t('enableTabGroupingLabel')}
+            label={t('copyUrl')}
           />
-          <Divider sx={{ my: 1 }} />
-          <FormControlLabel /* ...for showCopyUrl */ />
-          <FormControlLabel /* ...for showDuplicateTab */ />
+          <FormControlLabel
+            control={
+              <Switch
+                checked={settings.openTabsList.actions.showDuplicateTab}
+                onChange={handleActionChange('showDuplicateTab')}
+                disabled={!settings.openTabsList.enabled}
+              />
+            }
+            label={t('duplicateTab')}
+          />
+          <FormControlLabel
+            control={
+              <Switch
+                checked={settings.openTabsList.actions.showCloseTab}
+                onChange={handleActionChange('showCloseTab')}
+                disabled={!settings.openTabsList.enabled}
+              />
+            }
+            label={t('closeTab')}
+          />
         </FormGroup>
       </SettingsModuleCard>
     </Container>

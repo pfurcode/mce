@@ -89,7 +89,11 @@ export const OpenTabsList: React.FC = () => {
           return (
             <Box key={group ? group.id : 'ungrouped'}>
               {group && (
-                <ListItemButton onClick={() => handleGroupToggle(group.id)} sx={{ '& .group-actions': { display: 'none' }, '&:hover .group-actions': { display: 'flex' }}}>
+                <ListItemButton onClick={() => handleGroupToggle(group.id)} sx={{ 
+                  // Corrected hover behavior for group actions
+                  '& .group-actions': { opacity: 0, pointerEvents: 'none', transition: 'opacity 0.2s' }, 
+                  '&:hover .group-actions': { opacity: 1, pointerEvents: 'auto' } 
+                }}>
                   <ExpandMoreIcon sx={{ transform: isCollapsed ? 'rotate(-90deg)' : 'rotate(0deg)', transition: 'transform 0.2s', mr: 1 }} />
                   <Box sx={{ width: 8, height: 8, borderRadius: '50%', bgcolor: groupColorMap[group.color], mr: 1, flexShrink: 0 }} />
                   <Typography noWrap variant="caption" sx={{ fontWeight: 'bold', flexGrow: 1 }}>{group.title}</Typography>
@@ -102,7 +106,11 @@ export const OpenTabsList: React.FC = () => {
               )}
               <Collapse in={!isCollapsed} timeout="auto" unmountOnExit>
                 {tabsInGroup.map((tab) => (
-                  <ListItemButton key={tab.id} onClick={() => handleSwitchToTab(tab.id)} sx={{ pl: group ? 4 : 2, minHeight: '40px', bgcolor: group ? alpha(groupColorMap[group.color], 0.1) : 'transparent', '&:hover': { bgcolor: group ? alpha(groupColorMap[group.color], 0.2) : 'action.hover' }, '& .actions': { display: 'none' }, '&:hover .actions': { display: 'flex' } }}>
+                  <ListItemButton key={tab.id} onClick={() => handleSwitchToTab(tab.id)} sx={{ pl: group ? 4 : 2, minHeight: '40px', bgcolor: group ? alpha(groupColorMap[group.color], 0.1) : 'transparent', '&:hover': { bgcolor: group ? alpha(groupColorMap[group.color], 0.2) : 'action.hover' }, 
+                    // Corrected hover behavior for tab actions
+                    '& .actions': { opacity: 0, pointerEvents: 'none', transition: 'opacity 0.2s' }, 
+                    '&:hover .actions': { opacity: 1, pointerEvents: 'auto' } 
+                  }}>
                     <ListItemIcon sx={{ minWidth: 32, flexShrink: 0 }}><img src={`https://www.google.com/s2/favicons?domain=${getHostname(tab.url)}&sz=16`} width="16" height="16" alt="" /></ListItemIcon>
                     <ListItemText primary={tab.title} primaryTypographyProps={{ noWrap: true, fontWeight: tab.active ? 'bold' : 'normal' }} sx={{ flexGrow: 1, pr: 1, minWidth: 0 }} />
                     <Box className="actions" sx={{ flexShrink: 0 }}>

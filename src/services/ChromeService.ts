@@ -69,7 +69,7 @@ export class ChromeService {
   public static async closeGroup(tabs: chrome.tabs.Tab[], groupId: number): Promise<void> {
     const tabIdsToClose = tabs.filter(t => t.groupId === groupId && t.id).map(t => t.id!);
     if (tabIdsToClose.length > 0) {
-      return chrome.tabs.remove(tabIdsToClose);
+      return chrome.tabs.remove(tabIdsToClose as [number, ...number[]]);
     }
   }
 
@@ -102,5 +102,49 @@ export class ChromeService {
     if (tabIdsToUngroup.length > 0) {
       return chrome.tabs.ungroup(tabIdsToUngroup as [number, ...number[]]);
     }
+  }
+
+  // New methods to resolve compilation errors
+  /**
+   * Toggles the pinned status of a tab.
+   */
+  public static async togglePin(tabId: number, pinned: boolean): Promise<void> {
+    await chrome.tabs.update(tabId, { pinned: !pinned });
+  }
+
+  /**
+   * Toggles the muted status of a tab.
+   */
+  public static async toggleMute(tabId: number, muted: boolean): Promise<void> {
+    await chrome.tabs.update(tabId, { muted: !muted });
+  }
+
+  /**
+   * Exports a list of open tabs to an HTML file.
+   */
+  public static async exportTabsToFile(tabs: chrome.tabs.Tab[]): Promise<void> {
+    const content = `
+      <html>
+        <head>
+          <title>Exported Tabs</title>
+        </head>
+        <body>
+          <h1>Open Tabs</h1>
+          <ul>
+            ${tabs.map(tab => `<li><a href="${tab.url}">${tab.title}</a></li>`).join('')}
+          </ul>
+        </body>
+      </html>
+    `;
+    const blob = new Blob([content], { type: 'text/html' });
+    const url = URL.createObjectURL(blob);
+    
+    chrome.downloads.download({
+      url: url,
+      filename: 'exported-tabs.html',
+      saveAs: true,
+    }, () => {
+      URL.revokeObjectURL(url);
+    });
   }
 }

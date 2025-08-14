@@ -12,7 +12,7 @@ export const defaultSettings: AppSettings = {
     behavior: {
       sortBy: 'index',
       maxHeight: 250,
-      enableTabGrouping: true, // Add this line
+      // Removed: enableTabGrouping: true,
     },
     actions: {
       showCopyUrl: true,

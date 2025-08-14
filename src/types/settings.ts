@@ -13,6 +13,7 @@ interface OpenTabsListSettings extends ModuleSettings {
   behavior: {
     sortBy: 'index' | 'title' | 'url';
     maxHeight: number;
+    // Removed: enableTabGrouping: boolean;
   };
   actions: {
     showCopyUrl: boolean;
