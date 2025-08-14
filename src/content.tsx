@@ -2,7 +2,7 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { Sidebar } from './views/sidebar'; // Import the Sidebar component
+import { Sidebar } from './views/Sidebar'; // Import the Sidebar component
 import { DataService } from './services/DataService';
 
 // Create a root element to mount the Sidebar component

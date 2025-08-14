@@ -13,7 +13,7 @@
     "default_popup": "index.html"
   },
   "chrome_url_overrides": {
-    "newtab": "index.html"
+    "newtab": "newtab.html"
   },
   "options_page": "options.html",
   "options_ui": {
@@ -28,7 +28,7 @@
   ],
   "web_accessible_resources": [
     {
-      "resources": ["options.html"],
+      "resources": ["options.html", "newtab.html"],
       "matches": ["<all_urls>"]
     }
   ]
