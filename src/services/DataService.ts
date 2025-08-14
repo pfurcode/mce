@@ -1,38 +1,29 @@
 // src/services/DataService.ts
 
 import type { AppSettings } from '../types/settings';
+import { defaultSettings } from './defaultSettings';
+import merge from 'lodash-es/merge';
 
+/**
+ * A type-safe service for interacting with chrome.storage.sync.
+ */
 export class DataService {
-
   /**
-   * Retrieves a value from chrome.storage.sync.
-   * @param key The key of the setting to retrieve.
-   * @param defaultValue The value to return if the key is not found.
-   * @returns A promise that resolves with the stored value or the default value.
+   * Retrieves the entire settings object, merged with defaults.
    */
-  public static get<K extends keyof AppSettings>(
-    key: K, 
-    defaultValue: AppSettings[K]
-  ): Promise<AppSettings[K]> {
+  public static async getSettings(): Promise<AppSettings> {
     return new Promise((resolve) => {
-      chrome.storage.sync.get(key, (result) => {
-        // Resolve with the stored value if it exists, otherwise use the provided default
-        resolve((result[key] as AppSettings[K]) ?? defaultValue);
+      chrome.storage.sync.get(null, (savedSettings) => {
+        const fullSettings = merge({}, defaultSettings, savedSettings);
+        resolve(fullSettings);
       });
     });
   }
 
   /**
-   * Saves a value to chrome.storage.sync.
-   * @param key The key of the setting to save.
-   * @param value The value to save.
-   * @returns A promise that resolves when the operation is complete.
+   * Saves the entire settings object or a part of it.
    */
-  public static set<K extends keyof AppSettings>(key: K, value: AppSettings[K]): Promise<void> {
-    return new Promise((resolve) => {
-      chrome.storage.sync.set({ [key]: value }, () => {
-        resolve();
-      });
-    });
+  public static async saveSettings(settings: Partial<AppSettings>): Promise<void> {
+    return chrome.storage.sync.set(settings);
   }
 }

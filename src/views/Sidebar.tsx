@@ -1,13 +1,9 @@
 // src/views/Sidebar.tsx
 
 import React from 'react';
-import { Drawer, Box, Typography, Divider } from '@mui/material';
-
-// 1. Import the TodoList component
+import { Drawer, Divider } from '@mui/material';
 import { TodoList } from '../components/TodoList';
-
-// Define the width of our sidebar
-const SIDEBAR_WIDTH = 320;
+import { OpenTabsList } from '../components/OpenTabsList';
 
 export const Sidebar: React.FC = () => {
   return (
@@ -15,24 +11,19 @@ export const Sidebar: React.FC = () => {
       variant="permanent"
       anchor="right"
       sx={{
-        width: SIDEBAR_WIDTH,
+        // Use 100% to make the drawer fill the available space
+        width: '100%',
         flexShrink: 0,
         '& .MuiDrawer-paper': {
-          width: SIDEBAR_WIDTH,
+          width: '100%', // Also apply to the inner paper element
           boxSizing: 'border-box',
+          border: 'none',
         },
       }}
     >
-      <Box sx={{ p: 2 }}>
-        <Typography variant="h6" component="h2" gutterBottom>
-          MCE Sidebar
-        </Typography>
-      </Box>
+      <OpenTabsList />
       <Divider />
-
-      {/* 2. Render the TodoList component here */}
       <TodoList />
-
     </Drawer>
   );
 };

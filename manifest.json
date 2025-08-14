@@ -3,12 +3,14 @@
   "name": "Material Chrome Extension",
   "version": "0.1.0",
   "description": "A production-ready Chrome Extension.",
+  "default_locale": "en",
   "permissions": [
     "storage",
     "tabs",
     "sessions",
     "bookmarks",
-    "sidePanel"
+    "sidePanel",
+    "tabGroups"
   ],
   "background": {
     "service_worker": "src/background.ts",

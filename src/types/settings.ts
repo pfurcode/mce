@@ -1,13 +1,33 @@
 // src/types/settings.ts
 
-import type { Todo } from './todo'; // Import the new Todo type
+import type { Todo } from './todo';
 
-/**
- * Defines the structure for all settings in the MCE application.
- * This interface ensures type safety when getting or setting values.
- */
+interface ModuleSettings {
+  enabled: boolean;
+  version: string;
+  descriptionKey: string;
+}
+
+interface OpenTabsListSettings extends ModuleSettings {
+  title: string;
+  behavior: {
+    sortBy: 'index' | 'title' | 'url';
+    maxHeight: number;
+  };
+  actions: {
+    showCopyUrl: boolean;
+    showDuplicateTab: boolean;
+    showCloseTab: boolean;
+  };
+}
+
+interface NewTabSettings extends ModuleSettings {
+  // We can add specific settings for the New Tab page here later
+}
+
 export interface AppSettings {
-  isSidebarEnabled: boolean;
-  isNewTabEnabled: boolean;
-  todos: Todo[]; // Add the array of todos
+  userName: string;
+  todos: Todo[];
+  openTabsList: OpenTabsListSettings;
+  newTab: NewTabSettings;
 }

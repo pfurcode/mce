@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { DataService } from '../services/DataService';
 import type { Todo } from '../types/todo';
 
-// Import Material-UI components
+// Import necessary components from Material-UI
 import {
   Box,
   List,
@@ -18,7 +18,8 @@ import {
   FormControl,
   InputLabel,
   Select,
-  MenuItem
+  MenuItem,
+  ListItemText // Ensure ListItemText is imported
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 
@@ -27,33 +28,29 @@ export const TodoList: React.FC = () => {
   const [newTodoText, setNewTodoText] = useState('');
   const [newTodoPriority, setNewTodoPriority] = useState<'low' | 'medium' | 'high'>('medium');
 
-  // Load todos from storage when the component mounts
   useEffect(() => {
     const loadTodos = async () => {
-      const storedTodos = await DataService.get('todos', []);
-      setTodos(storedTodos);
+      const settings = await DataService.getSettings();
+      setTodos(settings.todos);
     };
     loadTodos();
   }, []);
 
-  // Function to save the entire list of todos to storage
   const saveTodos = (updatedTodos: Todo[]) => {
     setTodos(updatedTodos);
-    DataService.set('todos', updatedTodos);
+    DataService.saveSettings({ todos: updatedTodos });
   };
 
   const handleAddTodo = () => {
     if (newTodoText.trim() === '') return;
-
     const newTodo: Todo = {
-      id: crypto.randomUUID(), // Modern way to get a unique ID
+      id: crypto.randomUUID(),
       text: newTodoText.trim(),
       completed: false,
       priority: newTodoPriority,
     };
-
     saveTodos([...todos, newTodo]);
-    setNewTodoText(''); // Reset input field
+    setNewTodoText('');
   };
 
   const handleToggleTodo = (id: string) => {
@@ -69,12 +66,10 @@ export const TodoList: React.FC = () => {
   };
 
   return (
-    <Paper elevation={3} sx={{ p: 2, maxWidth: 500, m: 'auto' }}>
-      <Typography variant="h5" component="h2" gutterBottom>
+    <Paper elevation={0} sx={{ p: 2 }}>
+      <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }} gutterBottom>
         My Tasks
       </Typography>
-
-      {/* Form to add a new todo */}
       <Box sx={{ display: 'flex', gap: 1, mb: 2 }}>
         <TextField
           label="New Task"
@@ -85,12 +80,12 @@ export const TodoList: React.FC = () => {
           onChange={(e) => setNewTodoText(e.target.value)}
           onKeyPress={(e) => e.key === 'Enter' && handleAddTodo()}
         />
-        <FormControl size="small">
+        <FormControl size="small" sx={{minWidth: 100}}>
           <InputLabel>Priority</InputLabel>
           <Select
             value={newTodoPriority}
             label="Priority"
-            onChange={(e) => setNewTodoPriority(e.target.value as never)}
+            onChange={(e) => setNewTodoPriority(e.target.value as any)}
           >
             <MenuItem value="low">Low</MenuItem>
             <MenuItem value="medium">Medium</MenuItem>
@@ -99,8 +94,6 @@ export const TodoList: React.FC = () => {
         </FormControl>
         <Button variant="contained" onClick={handleAddTodo}>Add</Button>
       </Box>
-
-      {/* List of existing todos */}
       <List>
         {todos.map((todo) => (
           <ListItem
@@ -117,9 +110,9 @@ export const TodoList: React.FC = () => {
               checked={todo.completed}
               onChange={() => handleToggleTodo(todo.id)}
             />
-            <Typography sx={{ textDecoration: todo.completed ? 'line-through' : 'none', color: todo.completed ? 'text.secondary' : 'text.primary' }}>
+            <ListItemText sx={{ textDecoration: todo.completed ? 'line-through' : 'none', color: todo.completed ? 'text.secondary' : 'text.primary' }}>
               {todo.text}
-            </Typography>
+            </ListItemText>
           </ListItem>
         ))}
       </List>

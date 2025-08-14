@@ -1,0 +1,16 @@
+{
+  "openTabs": { "message": "Open Tabs" },
+  "copyUrl": { "message": "Copy URL" },
+  "closeTab": { "message": "Close Tab" },
+  "duplicateTab": { "message": "Duplicate Tab" },
+  "closeGroup": { "message": "Close group" },
+  "moveGroup": { "message": "Move group to new window" },
+  "ungroup": { "message": "Ungroup" },
+  "pinTab": { "message": "Pin tab" },
+  "unpinTab": { "message": "Unpin tab" },
+  "muteTab": { "message": "Mute tab" },
+  "unmuteTab": { "message": "Unmute tab" },
+  "exportTabs": { "message": "Export tabs to file" },
+  "enableTabGroupingLabel": { "message": "Group Tabs by Group" },
+  "exportTabs": { "message": "Export tabs as HTML file" }
+}

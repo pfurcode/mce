@@ -1,8 +1,8 @@
 // src/views/NewTab.tsx
-
 import React from 'react';
-import { Box, Typography, Container, Grid } from '@mui/material';
+import { Grid, Box, Container, Typography } from '@mui/material';
 import { TodoList } from '../components/TodoList';
+import { ClockWidget } from '../components/ClockWidget';
 
 export const NewTab: React.FC = () => {
   return (
@@ -11,9 +11,14 @@ export const NewTab: React.FC = () => {
         <Typography variant="h4" component="h1" gutterBottom>
           Dashboard
         </Typography>
-        <Grid container spacing={2}>
+        <Grid container spacing={3}>
+          <Grid item xs={12} md={8}>
+            {/* We can have a main area here later */}
+          </Grid>
+          <Grid item xs={12} md={4}>
+            <ClockWidget />
+          </Grid>
           <Grid item xs={12} md={6}>
-            {/* We'll place widgets here. Let's start with the TodoList */}
             <TodoList />
           </Grid>
           <Grid item xs={12} md={6}>
