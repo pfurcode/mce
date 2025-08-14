@@ -17,6 +17,7 @@ export default defineConfig({
         main: resolve(process.cwd(), 'index.html'),
         options: resolve(process.cwd(), 'options.html'),
         newtab: resolve(process.cwd(), 'newtab.html'), // Add this line
+        sidepanel: resolve(process.cwd(), 'sidepanel.html'), // Add this line
       },
     },
   },

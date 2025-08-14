@@ -7,29 +7,24 @@
     "storage",
     "tabs",
     "sessions",
-    "bookmarks"
+    "bookmarks",
+    "sidePanel"
   ],
+  "background": {
+    "service_worker": "src/background.ts",
+    "type": "module"
+  },
+  "side_panel": {
+    "default_path": "sidepanel.html"
+  },
   "action": {
-    "default_popup": "index.html"
+    "default_title": "Open MCE Side Panel"
   },
   "chrome_url_overrides": {
     "newtab": "newtab.html"
   },
-  "options_page": "options.html",
   "options_ui": {
     "page": "options.html",
     "open_in_tab": true
-  },
-  "content_scripts": [
-    {
-      "matches": ["<all_urls>"],
-      "js": ["src/content.tsx"]
-    }
-  ],
-  "web_accessible_resources": [
-    {
-      "resources": ["options.html", "newtab.html"],
-      "matches": ["<all_urls>"]
-    }
-  ]
+  }
 }
