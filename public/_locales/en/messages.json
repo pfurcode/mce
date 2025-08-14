@@ -1,59 +1,20 @@
 {
-  "settingsTitle": {
-    "message": "Settings"
-  },
-  "Theme": {
-    "message": "Theme"
-  },
-  "ThemeMode": {
-    "message": "Theme Mode"
-  },
-  "openTabs": {
-    "message": "Open Tabs"
-  },
-  "openTabsListDescription": {
-    "message": "Shows a list of all open tabs in the current window."
-  },
-  "moduleEnabled": {
-    "message": "Enable module"
-  },
-  "copyUrl": {
-    "message": "Copy URL"
-  },
-  "duplicateTab": {
-    "message": "Duplicate Tab"
-  },
-  "closeTab": {
-    "message": "Close Tab"
-  },
-  "closeGroup": {
-    "message": "Close group"
-  },
-  "moveGroup": {
-    "message": "Move group to new window"
-  },
-  "ungroup": {
-    "message": "Ungroup"
-  },
-  "pinTab": {
-    "message": "Pin tab"
-  },
-  "unpinTab": {
-    "message": "Unpin tab"
-  },
-  "muteTab": {
-    "message": "Mute tab"
-  },
-  "unmuteTab": {
-    "message": "Unmute tab"
-  },
-  "exportTabs": {
-    "message": "Export tabs to file"
-  },
-  "enableTabGroupingLabel": {
-    "message": "Group Tabs by Group"
-  },
-  "version": {
-    "message": "Version"
-  }
+  "loading": { "message": "Loading..." },
+  "settingsTitle": { "message": "Settings" },
+
+  "theme": { "message": "Theme" },
+  "themeMode": { "message": "Theme Mode" },
+  "theme_light": { "message": "Light" },
+  "theme_dark": { "message": "Dark" },
+  "theme_system": { "message": "System Default" },
+
+  "openTabs": { "message": "Open Tabs" },
+  "openTabsListDescription": { "message": "Shows a list of open tabs with actions" },
+  "newTabDescription": { "message": "Replace the new tab page with a custom one" },
+
+  "copyUrl": { "message": "Copy URL" },
+  "duplicateTab": { "message": "Duplicate Tab" },
+  "closeTab": { "message": "Close Tab" },
+  "moduleEnabled": { "message": "Enabled" },
+  "version": { "message": "Version" }
 }

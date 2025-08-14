@@ -2,18 +2,17 @@
 import type { AppSettings } from '../types/settings';
 
 export const defaultSettings: AppSettings = {
-  theme: 'system', // Set the default to system
   userName: 'Paweł',
+  theme: 'system',
   todos: [],
   openTabsList: {
     enabled: true,
     version: '1.0.0',
-    descriptionKey: 'openTabsListDescription',
-    title: 'Open Tabs',
+    descriptionKey: 'openTabsListDescription', // klucz i18n
+    title: 'openTabs', // KLUCZ i18n zamiast literalnego "Open Tabs"
     behavior: {
       sortBy: 'index',
       maxHeight: 250,
-      // Removed: enableTabGrouping: true,
     },
     actions: {
       showCopyUrl: true,

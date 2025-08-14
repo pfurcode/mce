@@ -2,18 +2,19 @@
 
 import type { Todo } from './todo';
 
+type ThemeMode = 'light' | 'dark' | 'system';
+
 interface ModuleSettings {
   enabled: boolean;
   version: string;
-  descriptionKey: string;
+  descriptionKey: string; // klucz do tłumaczenia
 }
 
 interface OpenTabsListSettings extends ModuleSettings {
-  title: string;
+  title: string; // KLUCZ tłumaczenia, np. 'openTabs'
   behavior: {
     sortBy: 'index' | 'title' | 'url';
     maxHeight: number;
-    // Removed: enableTabGrouping: boolean;
   };
   actions: {
     showCopyUrl: boolean;
@@ -23,13 +24,12 @@ interface OpenTabsListSettings extends ModuleSettings {
 }
 
 interface NewTabSettings extends ModuleSettings {
-  // We can add specific settings for the New Tab page here later
+  // future-specific fields
 }
 
 export interface AppSettings {
-  // Add a new theme property
-  theme: 'light' | 'dark' | 'system';
   userName: string;
+  theme: ThemeMode;
   todos: Todo[];
   openTabsList: OpenTabsListSettings;
   newTab: NewTabSettings;

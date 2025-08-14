@@ -14,7 +14,7 @@ import {
   Select,
   MenuItem,
 } from '@mui/material';
-import type { SelectChangeEvent } from '@mui/material';
+import type { SelectChangeEvent } from '@mui/material/Select';
 import { DataService } from '../services/DataService';
 import type { AppSettings } from '../types/settings';
 import { SettingsModuleCard } from '../components/SettingsModuleCard';
@@ -28,66 +28,78 @@ export const Options: React.FC = () => {
     DataService.getSettings().then(setSettings);
   }, []);
 
-  // Handler for module toggles
-  const handleModuleToggle = (moduleName: 'openTabsList' | 'newTab') => (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (!settings) return;
-    const newSettings = {
-      ...settings,
-      [moduleName]: { ...settings[moduleName], enabled: event.target.checked },
+  // Toggle modułów
+  const handleModuleToggle =
+    (moduleName: 'openTabsList' | 'newTab') =>
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      if (!settings) return;
+      const newSettings: AppSettings = {
+        ...settings,
+        [moduleName]: { ...settings[moduleName], enabled: event.target.checked },
+      };
+      setSettings(newSettings);
+      DataService.saveSettings(newSettings);
     };
-    setSettings(newSettings);
-    DataService.saveSettings(newSettings);
-  };
-  
-  const handleActionChange = (actionName: keyof AppSettings['openTabsList']['actions']) => (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (!settings) return;
-    const newSettings = {
-      ...settings,
-      openTabsList: {
-        ...settings.openTabsList,
-        actions: { ...settings.openTabsList.actions, [actionName]: event.target.checked },
-      },
-    };
-    setSettings(newSettings);
-    DataService.saveSettings(newSettings);
-  };
 
+  // Zmiana akcji OpenTabsList
+  const handleActionChange =
+    (actionName: keyof AppSettings['openTabsList']['actions']) =>
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      if (!settings) return;
+      const newSettings: AppSettings = {
+        ...settings,
+        openTabsList: {
+          ...settings.openTabsList,
+          actions: {
+            ...settings.openTabsList.actions,
+            [actionName]: event.target.checked,
+          },
+        },
+      };
+      setSettings(newSettings);
+      DataService.saveSettings(newSettings);
+    };
+
+  // Zmiana motywu
   const handleThemeChange = (event: SelectChangeEvent) => {
     if (!settings) return;
-    const newSettings = {
-      ...settings,
-      theme: event.target.value as 'light' | 'dark' | 'system',
-    };
+    const newTheme = event.target.value as AppSettings['theme'];
+    const newSettings: AppSettings = { ...settings, theme: newTheme };
     setSettings(newSettings);
     DataService.saveSettings(newSettings);
   };
 
-  if (!settings) return <Typography>Loading...</Typography>;
-  
+  if (!settings) return <Typography>{t('loading')}</Typography>;
+
   return (
     <Container maxWidth="md" sx={{ mt: 4 }}>
-      <Typography variant="h4" component="h1" gutterBottom>{t('settingsTitle')}</Typography>
-      
-      {/* Theme selection dropdown */}
+      <Typography variant="h4" component="h1" gutterBottom>
+        {t('settingsTitle')}
+      </Typography>
+
+      {/* Wybór motywu */}
       <Box sx={{ my: 4 }}>
-        <Typography variant="h6" gutterBottom>{t('Theme')}</Typography>
+        <Typography variant="h6" gutterBottom>
+          {t('theme')}
+        </Typography>
         <FormControl fullWidth>
-          <InputLabel>{t('Theme Mode')}</InputLabel>
+          <InputLabel>{t('themeMode')}</InputLabel>
           <Select
             value={settings.theme}
-            label={t('Theme Mode')}
+            label={t('themeMode')}
             onChange={handleThemeChange}
           >
-            <MenuItem value="light">Light</MenuItem>
-            <MenuItem value="dark">Dark</MenuItem>
-            <MenuItem value="system">System Default</MenuItem>
+            <MenuItem value="light">{t('theme_light')}</MenuItem>
+            <MenuItem value="dark">{t('theme_dark')}</MenuItem>
+            <MenuItem value="system">{t('theme_system')}</MenuItem>
           </Select>
         </FormControl>
       </Box>
 
-      <Divider />
+      <Divider sx={{ my: 2 }} />
 
       <SettingsModuleCard
+        // UWAGA: title to teraz KLUCZ, nie literal — patrz defaultSettings
         title={t(settings.openTabsList.title)}
         description={t(settings.openTabsList.descriptionKey)}
         version={settings.openTabsList.version}
