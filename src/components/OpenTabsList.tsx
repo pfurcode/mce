@@ -153,7 +153,6 @@ export const OpenTabsList: React.FC = () => {
                       onMouseEnter={() => setHoveredTabId(tab.id!)}
                       onMouseLeave={() => setHoveredTabId(null)}
                     >
-                      {/* Conditionally render pin icon or favicon */}
                       <ListItemIcon sx={{ minWidth: 32, flexShrink: 0 }}>
                         <IconButton size="small" onClick={(e) => handleTogglePin(e, tab)} onMouseDown={e => e.stopPropagation()}>
                           {tab.pinned ? 

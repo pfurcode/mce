@@ -8,7 +8,13 @@ import {
   FormControlLabel,
   Switch,
   Divider,
+  Box,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
 } from '@mui/material';
+import type { SelectChangeEvent } from '@mui/material';
 import { DataService } from '../services/DataService';
 import type { AppSettings } from '../types/settings';
 import { SettingsModuleCard } from '../components/SettingsModuleCard';
@@ -22,7 +28,7 @@ export const Options: React.FC = () => {
     DataService.getSettings().then(setSettings);
   }, []);
 
-  // Handler for module toggles (re-added)
+  // Handler for module toggles
   const handleModuleToggle = (moduleName: 'openTabsList' | 'newTab') => (event: React.ChangeEvent<HTMLInputElement>) => {
     if (!settings) return;
     const newSettings = {
@@ -46,15 +52,43 @@ export const Options: React.FC = () => {
     DataService.saveSettings(newSettings);
   };
 
+  const handleThemeChange = (event: SelectChangeEvent) => {
+    if (!settings) return;
+    const newSettings = {
+      ...settings,
+      theme: event.target.value as 'light' | 'dark' | 'system',
+    };
+    setSettings(newSettings);
+    DataService.saveSettings(newSettings);
+  };
+
   if (!settings) return <Typography>Loading...</Typography>;
   
   return (
     <Container maxWidth="md" sx={{ mt: 4 }}>
       <Typography variant="h4" component="h1" gutterBottom>{t('settingsTitle')}</Typography>
       
-      {/* The SettingsModuleCard now receives the enabled and onToggle props */}
+      {/* Theme selection dropdown */}
+      <Box sx={{ my: 4 }}>
+        <Typography variant="h6" gutterBottom>{t('Theme')}</Typography>
+        <FormControl fullWidth>
+          <InputLabel>{t('Theme Mode')}</InputLabel>
+          <Select
+            value={settings.theme}
+            label={t('Theme Mode')}
+            onChange={handleThemeChange}
+          >
+            <MenuItem value="light">Light</MenuItem>
+            <MenuItem value="dark">Dark</MenuItem>
+            <MenuItem value="system">System Default</MenuItem>
+          </Select>
+        </FormControl>
+      </Box>
+
+      <Divider />
+
       <SettingsModuleCard
-        title={settings.openTabsList.title}
+        title={t(settings.openTabsList.title)}
         description={t(settings.openTabsList.descriptionKey)}
         version={settings.openTabsList.version}
         enabled={settings.openTabsList.enabled}

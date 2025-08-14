@@ -2,6 +2,7 @@
 import type { AppSettings } from '../types/settings';
 
 export const defaultSettings: AppSettings = {
+  theme: 'system', // Set the default to system
   userName: 'Paweł',
   todos: [],
   openTabsList: {

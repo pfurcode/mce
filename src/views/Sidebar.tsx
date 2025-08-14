@@ -1,29 +1,59 @@
 // src/views/Sidebar.tsx
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Drawer, Divider } from '@mui/material';
-import { TodoList } from '../components/TodoList';
 import { OpenTabsList } from '../components/OpenTabsList';
+import { Footer } from '../components/Footer';
+import { DataService } from '../services/DataService';
+import type { AppSettings } from '../types/settings';
 
 export const Sidebar: React.FC = () => {
+  const [settings, setSettings] = useState<AppSettings | null>(null);
+
+  useEffect(() => {
+    const loadSettings = async () => {
+      const currentSettings = await DataService.getSettings();
+      setSettings(currentSettings);
+    };
+
+    loadSettings();
+
+    // Listen for changes to the settings and update the state
+    const listener = (changes: { [key: string]: chrome.storage.StorageChange }) => {
+      if (changes.openTabsList) {
+        loadSettings();
+      }
+    };
+    chrome.storage.onChanged.addListener(listener);
+
+    return () => {
+      chrome.storage.onChanged.removeListener(listener);
+    };
+  }, []);
+
+  if (!settings) {
+    return null; // Don't render anything while settings are loading
+  }
+
   return (
     <Drawer
       variant="permanent"
       anchor="right"
       sx={{
-        // Use 100% to make the drawer fill the available space
         width: '100%',
         flexShrink: 0,
         '& .MuiDrawer-paper': {
-          width: '100%', // Also apply to the inner paper element
+          width: '100%',
           boxSizing: 'border-box',
           border: 'none',
         },
       }}
     >
-      <OpenTabsList />
+      {/* Conditionally render the OpenTabsList based on settings */}
+      {settings.openTabsList.enabled && <OpenTabsList />}
       <Divider />
-      <TodoList />
+      {/* The Footer component with settings and clock */}
+      <Footer />
     </Drawer>
   );
 };

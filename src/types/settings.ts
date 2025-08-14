@@ -27,6 +27,8 @@ interface NewTabSettings extends ModuleSettings {
 }
 
 export interface AppSettings {
+  // Add a new theme property
+  theme: 'light' | 'dark' | 'system';
   userName: string;
   todos: Todo[];
   openTabsList: OpenTabsListSettings;
