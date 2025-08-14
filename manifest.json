@@ -1,0 +1,35 @@
+{
+  "manifest_version": 3,
+  "name": "Material Chrome Extension",
+  "version": "0.1.0",
+  "description": "A production-ready Chrome Extension.",
+  "permissions": [
+    "storage",
+    "tabs",
+    "sessions",
+    "bookmarks"
+  ],
+  "action": {
+    "default_popup": "index.html"
+  },
+  "chrome_url_overrides": {
+    "newtab": "index.html"
+  },
+  "options_page": "options.html",
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": true
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["src/content.tsx"]
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["options.html"],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}
