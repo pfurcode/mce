@@ -12,16 +12,12 @@ export class DataService {
    * Retrieves the entire settings object, merged with defaults.
    */
   public static async getSettings(): Promise<AppSettings> {
-    return new Promise((resolve) => {
-      chrome.storage.sync.get(null, (savedSettings) => {
-        if (chrome.runtime.lastError) {
-          resolve(defaultSettings);
-          return;
-        }
-        const fullSettings = merge({}, defaultSettings, savedSettings);
-        resolve(fullSettings);
-      });
-    });
+  try {
+      const savedSettings = await chrome.storage.sync.get();
+      return merge({}, defaultSettings, savedSettings);
+    } catch {
+      return merge({}, defaultSettings);
+    }
   }
 
   /**
