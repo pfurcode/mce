@@ -20,8 +20,9 @@ export class ChromeService {
     groups: chrome.tabGroups.TabGroup[];
   }> {
     const tabs = await chrome.tabs.query({ currentWindow: true });
-    const groups = await chrome.tabGroups.query({ windowId: chrome.windows.WINDOW_ID_CURRENT });
-    return { tabs, groups };
+const groups = chrome.tabGroups
+      ? await chrome.tabGroups.query({ windowId: chrome.windows.WINDOW_ID_CURRENT })
+      : [];    return { tabs, groups };
   }
 
   /**
