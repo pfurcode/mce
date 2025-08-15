@@ -1,5 +1,3 @@
-// src/components/OpenTabsList.tsx
-
 import React, { useState, useEffect, useCallback } from 'react';
 import { ChromeService } from '../services/ChromeService';
 import { DataService } from '../services/DataService';
@@ -34,12 +32,9 @@ export const OpenTabsList: React.FC = () => {
   const loadData = useCallback(async () => {
     const { tabs, groups } = await ChromeService.getTabsAndGroups();
     
-    // Sort tabs to move all pinned tabs to the top
     const sortedTabs = tabs.sort((a, b) => {
       if (a.pinned && !b.pinned) return -1;
       if (!a.pinned && b.pinned) return 1;
-      
-      // Secondary sort: by tab index to reflect browser order
       return (a.index || 0) - (b.index || 0);
     });
 
@@ -117,33 +112,31 @@ export const OpenTabsList: React.FC = () => {
               <Collapse in={!isCollapsed} timeout="auto" unmountOnExit>
                 {tabsInGroup.map((tab) => {
                   const hasMuteIcon = tab.audible;
-                  // Calculate the correct width of the actions container
                   const actionsWidth = (
                     (actions?.showCopyUrl ? 1 : 0) +
                     (actions?.showDuplicateTab ? 1 : 0) +
                     (actions?.showCloseTab ? 1 : 0) +
                     (hasMuteIcon ? 1 : 0)
-                  ) * 32; // Assuming 32px per icon button
-                
+                  ) * 32;
+
                   return (
-                    <ListItemButton 
-                      key={tab.id} 
-                      onClick={() => handleSwitchToTab(tab.id)} 
-                      sx={{ 
-                        pl: group ? 4 : 2, 
-                        minHeight: '40px', 
-                        bgcolor: tab.active ? 'action.selected' : (group ? alpha(groupColorMap[group.color], 0.1) : 'transparent'), 
+                    <ListItemButton
+                      key={tab.id}
+                      selected={tab.active}
+                      onClick={() => handleSwitchToTab(tab.id)}
+                      sx={{
+                        pl: group ? 4 : 2,
+                        minHeight: '40px',
+                        borderLeft: '4px solid',
+                        borderLeftColor: tab.active ? 'primary.main' : 'transparent',
+                        bgcolor: tab.active ? 'action.selected' : (group ? alpha(groupColorMap[group.color], 0.1) : 'transparent'),
                         '&:hover': { bgcolor: group ? alpha(groupColorMap[group.color], 0.2) : 'action.hover' },
-                        
-                        // Default state: icons are hidden
                         '& .actions': {
-                          width: '0px',
+                          width: 0,
                           overflow: 'hidden',
                           opacity: 0,
                           pointerEvents: 'none',
                         },
-                        
-                        // Hover state: icons are visible
                         '&:hover .actions': {
                           width: `${actionsWidth}px`,
                           opacity: 1,
@@ -170,13 +163,12 @@ export const OpenTabsList: React.FC = () => {
                         sx={{ flexGrow: 1, pr: 1, minWidth: 0 }}
                       />
                       <Box className="actions" sx={{ flexShrink: 0, display: 'flex', alignItems: 'center', gap: 0.5 }}>
-                        {/* Conditional rendering for the mute icon based on the audible status */}
                         {hasMuteIcon && (
-                            <Tooltip title={tab.mutedInfo?.muted ? t('unmuteTab') : t('muteTab')}>
-                                <IconButton size="small" onClick={(e) => handleToggleMute(e, tab)}>
-                                    {tab.mutedInfo?.muted ? <VolumeOffIcon fontSize="small" /> : <VolumeUpIcon fontSize="small" />}
-                                </IconButton>
-                            </Tooltip>
+                          <Tooltip title={tab.mutedInfo?.muted ? t('unmuteTab') : t('muteTab')}>
+                            <IconButton size="small" onClick={(e) => handleToggleMute(e, tab)}>
+                              {tab.mutedInfo?.muted ? <VolumeOffIcon fontSize="small" /> : <VolumeUpIcon fontSize="small" />}
+                            </IconButton>
+                          </Tooltip>
                         )}
                         <Tooltip title={t('copyUrl')}><IconButton size="small" onClick={(e) => handleCopyUrl(e, tab.url)}><LinkIcon fontSize="small" /></IconButton></Tooltip>
                         {actions?.showDuplicateTab && <Tooltip title={t('duplicateTab')}><IconButton size="small" onClick={(e) => handleDuplicateTab(e, tab.id)}><FilterNoneIcon fontSize="small" /></IconButton></Tooltip>}

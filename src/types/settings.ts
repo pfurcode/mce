@@ -1,5 +1,3 @@
-// src/types/settings.ts
-
 import type { Todo } from './todo';
 
 type ThemeMode = 'light' | 'dark' | 'system';
@@ -7,11 +5,11 @@ type ThemeMode = 'light' | 'dark' | 'system';
 interface ModuleSettings {
   enabled: boolean;
   version: string;
-  descriptionKey: string; // klucz do tłumaczenia
+  descriptionKey: string;
 }
 
 interface OpenTabsListSettings extends ModuleSettings {
-  title: string; // KLUCZ tłumaczenia, np. 'openTabs'
+  title: string;
   behavior: {
     sortBy: 'index' | 'title' | 'url';
     maxHeight: number;
@@ -23,9 +21,7 @@ interface OpenTabsListSettings extends ModuleSettings {
   };
 }
 
-// For now `NewTabSettings` doesn't add any extra fields, so use a type alias
-// instead of an empty interface to avoid lint errors.
-type NewTabSettings = ModuleSettings;
+type NewTabSettings = Record<string, never>;
 
 export interface AppSettings {
   userName: string;

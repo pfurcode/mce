@@ -1,10 +1,7 @@
-// src/components/TodoList.tsx
-
 import React, { useState, useEffect } from 'react';
 import { DataService } from '../services/DataService';
 import type { Todo } from '../types/todo';
 
-// Import necessary components from Material-UI
 import {
   Box,
   List,
@@ -18,7 +15,7 @@ import {
   FormControl,
   InputLabel,
   MenuItem,
-  ListItemText // Ensure ListItemText is imported
+  ListItemText,
 } from '@mui/material';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import DeleteIcon from '@mui/icons-material/Delete';
