@@ -23,9 +23,9 @@ interface OpenTabsListSettings extends ModuleSettings {
   };
 }
 
-interface NewTabSettings extends ModuleSettings {
-  // future-specific fields
-}
+// For now `NewTabSettings` doesn't add any extra fields, so use a type alias
+// instead of an empty interface to avoid lint errors.
+type NewTabSettings = ModuleSettings;
 
 export interface AppSettings {
   userName: string;

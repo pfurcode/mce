@@ -1,6 +1,6 @@
 // src/components/OpenTabsList.tsx
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { ChromeService } from '../services/ChromeService';
 import { DataService } from '../services/DataService';
 import type { AppSettings } from '../types/settings';
@@ -31,7 +31,7 @@ export const OpenTabsList: React.FC = () => {
   const [hoveredTabId, setHoveredTabId] = useState<number | null>(null);
   const { t } = useTranslation();
 
-  const loadData = async () => {
+  const loadData = useCallback(async () => {
     const { tabs, groups } = await ChromeService.getTabsAndGroups();
     
     // Sort tabs to move all pinned tabs to the top
@@ -46,7 +46,7 @@ export const OpenTabsList: React.FC = () => {
     setTabs(sortedTabs);
     setGroups(groups);
     if (!settings) setSettings(await DataService.getSettings());
-  };
+  }, [settings]);
 
   useEffect(() => {
     loadData();
@@ -60,7 +60,7 @@ export const OpenTabsList: React.FC = () => {
       groupListeners.forEach(l => l.removeListener(loadData));
       chrome.storage.onChanged.removeListener(loadData);
     };
-  }, []);
+  }, [loadData]);
   
   const handleSwitchToTab = (tabId?: number) => { if (tabId) ChromeService.switchToTab(tabId); };
   const handleCopyUrl = (e: React.MouseEvent, url?: string) => { e.stopPropagation(); if (url) ChromeService.copyToClipboard(url); };

@@ -2,11 +2,12 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 
-// ŁADUJEMY Z src/_locales (nie z public)
-import enFile from './_locales/en/messages.json';
-// przykładowo:
-// import plFile from './_locales/pl/messages.json';
-// import deFile from './_locales/de/messages.json';
+// Load locale messages from the extension's public directory. These files
+// are shipped with the Chrome extension under `public/_locales`.
+import enFile from '../public/_locales/en/messages.json';
+// For additional languages you can import other locale files, e.g.:
+// import plFile from '../public/_locales/pl/messages.json';
+// import deFile from '../public/_locales/de/messages.json';
 
 type ChromeMessages = Record<string, { message: string }>;
 
