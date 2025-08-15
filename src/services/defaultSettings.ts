@@ -28,7 +28,6 @@ export const defaultSettings: AppSettings = {
     title: 'recentlyClosedTabs',
     maxTabs: 10,
     showTime: true,
-    maxHeight: 150,
   },
   newTab: {},
 };

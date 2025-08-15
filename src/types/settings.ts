@@ -27,7 +27,6 @@ interface RecentlyClosedTabsSettings extends ModuleSettings {
     title: string;
     maxTabs: number;
     showTime: boolean;
-    maxHeight: number;
 }
 
 type NewTabSettings = Record<string, never>;
