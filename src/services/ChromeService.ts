@@ -147,4 +147,12 @@ export class ChromeService {
       URL.revokeObjectURL(url);
     });
   }
+
+  public static async getRecentlyClosedTabs(maxTabs: number): Promise<chrome.sessions.Session[]> {
+      return chrome.sessions.getRecentlyClosed({ maxResults: maxTabs });
+  }
+
+  public static async restoreTab(sessionId: string): Promise<chrome.sessions.Session | undefined> {
+      return chrome.sessions.restore(sessionId);
+  }
 }

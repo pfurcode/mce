@@ -1,7 +1,9 @@
+// src/components/OpenTabsList.tsx
+
 import React, { useState, useEffect, useCallback } from 'react';
-import { ChromeService } from '../services/ChromeService';
-import { DataService } from '../services/DataService';
-import type { AppSettings } from '../types/settings';
+import { ChromeService } from '../../services/ChromeService';
+import { DataService } from '../../services/DataService';
+import type { AppSettings } from '../../types/settings';
 import { useTranslation } from 'react-i18next';
 import {
   Box, Divider, List, ListItemButton, ListItemIcon, ListItemText, Tooltip,
@@ -92,7 +94,7 @@ export const OpenTabsList: React.FC = () => {
         </Box>
       </Box>
       <Divider />
-      <List dense sx={{ p: 1, maxHeight: '300px', overflowY: 'auto' }}>
+      <List dense sx={{ p: 1, maxHeight: `${settings?.openTabsList.behavior.maxHeight}px`, overflowY: 'auto' }}>
         {groupedTabs.map((tabsInGroup) => {
           const firstTab = tabsInGroup[0];
           const group = firstTab.groupId > 0 ? groupMap.get(firstTab.groupId) : null;

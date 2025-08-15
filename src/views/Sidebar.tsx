@@ -2,10 +2,11 @@
 
 import React, { useState, useEffect } from 'react';
 import { Drawer, Divider } from '@mui/material';
-import { OpenTabsList } from '../components/OpenTabsList';
 import { Footer } from '../components/Footer';
 import { DataService } from '../services/DataService';
 import type { AppSettings } from '../types/settings';
+import { OpenTabsList } from '../modules/openTabsList/OpenTabsList';
+import { RecentlyClosedTabsList } from '../modules/recentlyClosedTabs/RecentlyClosedTabsList';
 
 export const Sidebar: React.FC = () => {
   const [settings, setSettings] = useState<AppSettings | null>(null);
@@ -18,9 +19,8 @@ export const Sidebar: React.FC = () => {
 
     loadSettings();
 
-    // Listen for changes to the settings and update the state
     const listener = (changes: { [key: string]: chrome.storage.StorageChange }) => {
-      if (changes.openTabsList) {
+      if (changes.openTabsList || changes.recentlyClosedTabs) {
         loadSettings();
       }
     };
@@ -49,10 +49,9 @@ export const Sidebar: React.FC = () => {
         },
       }}
     >
-      {/* Conditionally render the OpenTabsList based on settings */}
       {settings.openTabsList.enabled && <OpenTabsList />}
+      {settings.recentlyClosedTabs.enabled && <RecentlyClosedTabsList />}
       <Divider />
-      {/* The Footer component with settings and clock */}
       <Footer />
     </Drawer>
   );

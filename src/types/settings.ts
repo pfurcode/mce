@@ -1,3 +1,5 @@
+// src/types/settings.ts
+
 import type { Todo } from './todo';
 
 type ThemeMode = 'light' | 'dark' | 'system';
@@ -21,6 +23,13 @@ interface OpenTabsListSettings extends ModuleSettings {
   };
 }
 
+interface RecentlyClosedTabsSettings extends ModuleSettings {
+    title: string;
+    maxTabs: number;
+    showTime: boolean;
+    maxHeight: number;
+}
+
 type NewTabSettings = Record<string, never>;
 
 export interface AppSettings {
@@ -28,5 +37,6 @@ export interface AppSettings {
   theme: ThemeMode;
   todos: Todo[];
   openTabsList: OpenTabsListSettings;
+  recentlyClosedTabs: RecentlyClosedTabsSettings;
   newTab: NewTabSettings;
 }

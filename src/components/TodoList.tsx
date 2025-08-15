@@ -16,6 +16,8 @@ import {
   InputLabel,
   MenuItem,
   ListItemText,
+  ToggleButton,
+  ToggleButtonGroup,
 } from '@mui/material';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -28,6 +30,7 @@ export const TodoList: React.FC = () => {
   const [newTodoPriority, setNewTodoPriority] = useState<'low' | 'medium' | 'high'>('medium');
   const [newTodoDue, setNewTodoDue] = useState('');
   const [currentTime, setCurrentTime] = useState(Date.now());
+  const [formats, setFormats] = useState<string[]>([]);
 
   useEffect(() => {
     const loadTodos = async () => {
@@ -47,13 +50,32 @@ export const TodoList: React.FC = () => {
     DataService.saveSettings({ todos: updatedTodos });
   };
 
+  const handleFormat = (
+    _event: React.MouseEvent<HTMLElement>,
+    newFormats: string[],
+  ) => {
+    setFormats(newFormats);
+  };
+
   const handleAddTodo = () => {
     if (newTodoText.trim() === '') return;
     const link = newTodoLink.trim();
     const due = newTodoDue.trim();
+
+    let formattedText = newTodoText.trim();
+    if (formats.includes('bold')) {
+      formattedText = `<b>${formattedText}</b>`;
+    }
+    if (formats.includes('italic')) {
+      formattedText = `<i>${formattedText}</i>`;
+    }
+    if (formats.includes('underline')) {
+      formattedText = `<u>${formattedText}</u>`;
+    }
+
     const newTodo: Todo = {
       id: crypto.randomUUID(),
-      text: newTodoText.trim(),
+      text: formattedText,
       completed: false,
       priority: newTodoPriority,
       ...(link && { link }),
@@ -63,6 +85,7 @@ export const TodoList: React.FC = () => {
     setNewTodoText('');
     setNewTodoLink('');
     setNewTodoDue('');
+    setFormats([]);
   };
 
   const handleToggleTodo = (id: string) => {
@@ -153,6 +176,22 @@ export const TodoList: React.FC = () => {
             <MenuItem value="high">High</MenuItem>
           </Select>
         </FormControl>
+        <ToggleButtonGroup
+          value={formats}
+          onChange={handleFormat}
+          size="small"
+          aria-label="text formatting"
+        >
+          <ToggleButton value="bold" aria-label="bold">
+            <Typography fontWeight="bold">B</Typography>
+          </ToggleButton>
+          <ToggleButton value="italic" aria-label="italic">
+            <Typography fontStyle="italic">I</Typography>
+          </ToggleButton>
+          <ToggleButton value="underline" aria-label="underline">
+            <Typography sx={{ textDecoration: 'underline' }}>U</Typography>
+          </ToggleButton>
+        </ToggleButtonGroup>
         <Button variant="contained" onClick={handleAddTodo}>Add</Button>
       </Box>
       <List>
@@ -171,8 +210,12 @@ export const TodoList: React.FC = () => {
               checked={todo.completed}
               onChange={() => handleToggleTodo(todo.id)}
             />
-            <ListItemText sx={{ display: 'flex', alignItems: 'center', color: todo.completed ? 'text.secondary' : 'text.primary', textDecoration: todo.completed ? 'line-through' : 'none' }}>
-              {todo.text}
+            <ListItemText sx={{ display: 'flex', alignItems: 'center', color: todo.completed ? 'text.secondary' : 'text.primary' }}>
+              <Typography
+                component="span"
+                sx={{ textDecoration: todo.completed ? 'line-through' : 'none' }}
+                dangerouslySetInnerHTML={{ __html: todo.text }}
+              />
               {todo.link && (
                 <Box
                   component="a"

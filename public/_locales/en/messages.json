@@ -10,6 +10,9 @@
   "openTabs": { "message": "Open Tabs" },
   "openTabsListDescription": { "message": "Shows a list of open tabs with actions" },
   "newTabDescription": { "message": "Replace the new tab page with a custom one" },
+  "recentlyClosedTabs": { "message": "Recently Closed Tabs" },
+  "recentlyClosedTabsDescription": { "message": "Shows a list of recently closed tabs" },
+
 
   "exportTabs": { "message": "Export Tabs" },
   "moveGroup": { "message": "Move group to new window" },
@@ -21,7 +24,11 @@
   "closeTab": { "message": "Close Tab" },
   "muteTab": { "message": "Mute Tab" },
   "unmuteTab": { "message": "Unmute Tab" },
+  "restoreTab": { "message": "Restore Tab" },
 
   "moduleEnabled": { "message": "Enabled" },
-  "version": { "message": "Version" }
+  "version": { "message": "Version" },
+  "maxTabs": { "message": "Number of tabs to show" },
+  "showTime": { "message": "Show time ago" },
+  "maxHeight": { "message": "Max list height (px)" }
 }

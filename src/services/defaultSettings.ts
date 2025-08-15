@@ -1,3 +1,5 @@
+// src/services/defaultSettings.ts
+
 import type { AppSettings } from '../types/settings';
 
 export const defaultSettings: AppSettings = {
@@ -18,6 +20,15 @@ export const defaultSettings: AppSettings = {
       showDuplicateTab: true,
       showCloseTab: true,
     },
+  },
+  recentlyClosedTabs: {
+    enabled: true,
+    version: '1.0.0',
+    descriptionKey: 'recentlyClosedTabsDescription',
+    title: 'recentlyClosedTabs',
+    maxTabs: 10,
+    showTime: true,
+    maxHeight: 150,
   },
   newTab: {},
 };
