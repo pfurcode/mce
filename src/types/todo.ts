@@ -9,4 +9,6 @@ export interface Todo {
   completed: boolean;
   priority: 'low' | 'medium' | 'high';
   link?: string; // Optional URL associated with the todo
+  dueDate?: string; // Optional due date/time for the todo
+
 }
