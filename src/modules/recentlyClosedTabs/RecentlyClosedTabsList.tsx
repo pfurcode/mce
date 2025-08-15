@@ -33,6 +33,10 @@ export const RecentlyClosedTabsList: React.FC = () => {
     loadSettings();
   }, [loadSettings]);
 
+  if (!settings) {
+    return null; // <-- CRASH FIX: Wait for settings to load
+  }
+
   useEffect(() => {
     loadData();
     const tabListeners = [chrome.tabs.onCreated, chrome.tabs.onRemoved];

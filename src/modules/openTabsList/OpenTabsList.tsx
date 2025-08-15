@@ -63,7 +63,9 @@ export const OpenTabsList: React.FC = () => {
       chrome.storage.onChanged.removeListener(handleStorageChange);
     };
   }, [loadData, loadSettings]);
-
+  if (!settings) {
+    return null; // <-- CRASH FIX: Wait for settings to load
+  }
   const handleSwitchToTab = (tabId?: number) => { if (tabId) ChromeService.switchToTab(tabId); };
   const handleCopyUrl = (e: React.MouseEvent, url?: string) => { e.stopPropagation(); if (url) ChromeService.copyToClipboard(url); };
   const handleCloseTab = (e: React.MouseEvent, tabId?: number) => { e.stopPropagation(); if (tabId) ChromeService.closeTab(tabId); };
