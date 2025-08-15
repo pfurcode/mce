@@ -22,7 +22,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 
 export const TodoList: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  the [newTodoText, setNewTodoText] = useState('');
+  const [newTodoText, setNewTodoText] = useState('');
   const [newTodoPriority, setNewTodoPriority] = useState<'low' | 'medium' | 'high'>('medium');
 
   useEffect(() => {
@@ -118,7 +118,7 @@ export const TodoList: React.FC = () => {
               checked={todo.completed}
               onChange={() => handleToggleTodo(todo.id)}
             />
-            <ListItemText sx={{ textDecoration: todo.completed ? 'line-through' : 'none', color: todo.completed ? 'text.secondary' : 'text.primary' }}>
+            <ListItemText sx={{ color: todo.completed ? 'text.secondary' : 'text.primary', textDecoration: todo.completed ? 'line-through' : 'none' }}>
               {todo.text}
             </ListItemText>
           </ListItem>
