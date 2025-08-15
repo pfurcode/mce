@@ -1,10 +1,7 @@
-// src/components/TodoList.tsx
-
 import React, { useState, useEffect } from 'react';
 import { DataService } from '../services/DataService';
 import type { Todo } from '../types/todo';
 
-// Import necessary components from Material-UI
 import {
   Box,
   List,
@@ -17,10 +14,10 @@ import {
   Paper,
   FormControl,
   InputLabel,
-  Select,
   MenuItem,
-  ListItemText // Ensure ListItemText is imported
+  ListItemText,
 } from '@mui/material';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
 import DeleteIcon from '@mui/icons-material/Delete';
 
 export const TodoList: React.FC = () => {
@@ -65,6 +62,12 @@ export const TodoList: React.FC = () => {
     saveTodos(updatedTodos);
   };
 
+  const handlePriorityChange = (
+    e: SelectChangeEvent<'low' | 'medium' | 'high'>,
+  ) => {
+    setNewTodoPriority(e.target.value as 'low' | 'medium' | 'high');
+  };
+
   return (
     <Paper elevation={0} sx={{ p: 2 }}>
       <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }} gutterBottom>
@@ -85,7 +88,7 @@ export const TodoList: React.FC = () => {
           <Select
             value={newTodoPriority}
             label="Priority"
-            onChange={(e) => setNewTodoPriority(e.target.value as any)}
+            onChange={handlePriorityChange}
           >
             <MenuItem value="low">Low</MenuItem>
             <MenuItem value="medium">Medium</MenuItem>

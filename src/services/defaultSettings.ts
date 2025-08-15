@@ -1,4 +1,3 @@
-// src/services/defaultSettings.ts
 import type { AppSettings } from '../types/settings';
 
 export const defaultSettings: AppSettings = {
@@ -8,8 +7,8 @@ export const defaultSettings: AppSettings = {
   openTabsList: {
     enabled: true,
     version: '1.0.0',
-    descriptionKey: 'openTabsListDescription', // klucz i18n
-    title: 'openTabs', // KLUCZ i18n zamiast literalnego "Open Tabs"
+    descriptionKey: 'openTabsListDescription',
+    title: 'openTabs',
     behavior: {
       sortBy: 'index',
       maxHeight: 250,
@@ -20,9 +19,5 @@ export const defaultSettings: AppSettings = {
       showCloseTab: true,
     },
   },
-  newTab: {
-    enabled: true,
-    version: '1.0.0',
-    descriptionKey: 'newTabDescription',
-  },
+  newTab: {},
 };

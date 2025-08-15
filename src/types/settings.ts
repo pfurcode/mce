@@ -1,5 +1,3 @@
-// src/types/settings.ts
-
 import type { Todo } from './todo';
 
 type ThemeMode = 'light' | 'dark' | 'system';
@@ -7,11 +5,11 @@ type ThemeMode = 'light' | 'dark' | 'system';
 interface ModuleSettings {
   enabled: boolean;
   version: string;
-  descriptionKey: string; // klucz do tłumaczenia
+  descriptionKey: string;
 }
 
 interface OpenTabsListSettings extends ModuleSettings {
-  title: string; // KLUCZ tłumaczenia, np. 'openTabs'
+  title: string;
   behavior: {
     sortBy: 'index' | 'title' | 'url';
     maxHeight: number;
@@ -23,9 +21,7 @@ interface OpenTabsListSettings extends ModuleSettings {
   };
 }
 
-interface NewTabSettings extends ModuleSettings {
-  // future-specific fields
-}
+type NewTabSettings = Record<string, never>;
 
 export interface AppSettings {
   userName: string;
