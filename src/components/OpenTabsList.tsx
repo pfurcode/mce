@@ -31,7 +31,7 @@ export const OpenTabsList: React.FC = () => {
 
   const loadData = useCallback(async () => {
     const { tabs, groups } = await ChromeService.getTabsAndGroups();
-    
+
     const sortedTabs = tabs.sort((a, b) => {
       if (a.pinned && !b.pinned) return -1;
       if (!a.pinned && b.pinned) return 1;
@@ -40,23 +40,28 @@ export const OpenTabsList: React.FC = () => {
 
     setTabs(sortedTabs);
     setGroups(groups);
-    if (!settings) setSettings(await DataService.getSettings());
-  }, [settings]);
+  }, []);
+
+  const loadSettings = useCallback(async () => {
+    setSettings(await DataService.getSettings());
+  }, []);
 
   useEffect(() => {
     loadData();
+    loadSettings();
     const tabListeners = [chrome.tabs.onCreated, chrome.tabs.onRemoved, chrome.tabs.onUpdated, chrome.tabs.onAttached, chrome.tabs.onDetached, chrome.tabs.onMoved];
     const groupListeners = [chrome.tabGroups.onCreated, chrome.tabGroups.onRemoved, chrome.tabGroups.onMoved, chrome.tabGroups.onUpdated];
+    const handleStorageChange = () => { loadData(); loadSettings(); };
     tabListeners.forEach(l => l.addListener(loadData));
     groupListeners.forEach(l => l.addListener(loadData));
-    chrome.storage.onChanged.addListener(loadData);
+    chrome.storage.onChanged.addListener(handleStorageChange);
     return () => {
       tabListeners.forEach(l => l.removeListener(loadData));
       groupListeners.forEach(l => l.removeListener(loadData));
-      chrome.storage.onChanged.removeListener(loadData);
+      chrome.storage.onChanged.removeListener(handleStorageChange);
     };
-  }, [loadData]);
-  
+  }, [loadData, loadSettings]);
+
   const handleSwitchToTab = (tabId?: number) => { if (tabId) ChromeService.switchToTab(tabId); };
   const handleCopyUrl = (e: React.MouseEvent, url?: string) => { e.stopPropagation(); if (url) ChromeService.copyToClipboard(url); };
   const handleCloseTab = (e: React.MouseEvent, tabId?: number) => { e.stopPropagation(); if (tabId) ChromeService.closeTab(tabId); };
@@ -95,9 +100,9 @@ export const OpenTabsList: React.FC = () => {
           return (
             <Box key={group ? group.id : 'ungrouped'}>
               {group && (
-                <ListItemButton onClick={() => handleGroupToggle(group.id)} sx={{ 
-                  '& .group-actions': { opacity: 0, pointerEvents: 'none', transition: 'opacity 0.2s' }, 
-                  '&:hover .group-actions': { opacity: 1, pointerEvents: 'auto' } 
+                <ListItemButton onClick={() => handleGroupToggle(group.id)} sx={{
+                  '& .group-actions': { opacity: 0, pointerEvents: 'none', transition: 'opacity 0.2s' },
+                  '&:hover .group-actions': { opacity: 1, pointerEvents: 'auto' }
                 }}>
                   <ExpandMoreIcon sx={{ transform: isCollapsed ? 'rotate(-90deg)' : 'rotate(0deg)', transition: 'transform 0.2s', mr: 1 }} />
                   <Box sx={{ width: 8, height: 8, borderRadius: '50%', bgcolor: groupColorMap[group.color], mr: 1, flexShrink: 0 }} />
@@ -148,18 +153,18 @@ export const OpenTabsList: React.FC = () => {
                     >
                       <ListItemIcon sx={{ minWidth: 32, flexShrink: 0 }}>
                         <IconButton size="small" onClick={(e) => handleTogglePin(e, tab)} onMouseDown={e => e.stopPropagation()}>
-                          {tab.pinned ? 
+                          {tab.pinned ?
                             <PushPinIcon fontSize="small" sx={{ color: 'text.secondary' }} /> :
-                            (hoveredTabId === tab.id ? 
+                            (hoveredTabId === tab.id ?
                               <PushPinOutlinedIcon fontSize="small" /> :
                               <img src={`https://www.google.com/s2/favicons?domain=${getHostname(tab.url)}&sz=16`} width="16" height="16" alt="" />
                             )
                           }
                         </IconButton>
                       </ListItemIcon>
-                      <ListItemText 
-                        primary={tab.title} 
-                        primaryTypographyProps={{ noWrap: true, fontWeight: tab.active ? 'bold' : 'normal', overflow: 'hidden', textOverflow: 'ellipsis' }} 
+                      <ListItemText
+                        primary={tab.title}
+                        primaryTypographyProps={{ noWrap: true, fontWeight: tab.active ? 'bold' : 'normal', overflow: 'hidden', textOverflow: 'ellipsis' }}
                         sx={{ flexGrow: 1, pr: 1, minWidth: 0 }}
                       />
                       <Box className="actions" sx={{ flexShrink: 0, display: 'flex', alignItems: 'center', gap: 0.5 }}>

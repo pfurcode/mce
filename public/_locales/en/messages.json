@@ -1,7 +1,6 @@
 {
   "loading": { "message": "Loading..." },
   "settingsTitle": { "message": "Settings" },
-
   "theme": { "message": "Theme" },
   "themeMode": { "message": "Theme Mode" },
   "theme_light": { "message": "Light" },
@@ -12,9 +11,17 @@
   "openTabsListDescription": { "message": "Shows a list of open tabs with actions" },
   "newTabDescription": { "message": "Replace the new tab page with a custom one" },
 
+  "exportTabs": { "message": "Export Tabs" },
+  "moveGroup": { "message": "Move group to new window" },
+  "ungroup": { "message": "Ungroup" },
+  "closeGroup": { "message": "Close group" },
+
   "copyUrl": { "message": "Copy URL" },
   "duplicateTab": { "message": "Duplicate Tab" },
   "closeTab": { "message": "Close Tab" },
+  "muteTab": { "message": "Mute Tab" },
+  "unmuteTab": { "message": "Unmute Tab" },
+
   "moduleEnabled": { "message": "Enabled" },
   "version": { "message": "Version" }
 }

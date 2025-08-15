@@ -22,7 +22,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 
 export const TodoList: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [newTodoText, setNewTodoText] = useState('');
+  the [newTodoText, setNewTodoText] = useState('');
   const [newTodoPriority, setNewTodoPriority] = useState<'low' | 'medium' | 'high'>('medium');
 
   useEffect(() => {
@@ -81,7 +81,12 @@ export const TodoList: React.FC = () => {
           fullWidth
           value={newTodoText}
           onChange={(e) => setNewTodoText(e.target.value)}
-          onKeyPress={(e) => e.key === 'Enter' && handleAddTodo()}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              e.preventDefault();
+              handleAddTodo();
+            }
+          }}
         />
         <FormControl size="small" sx={{minWidth: 100}}>
           <InputLabel>Priority</InputLabel>
