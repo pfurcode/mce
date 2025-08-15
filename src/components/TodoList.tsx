@@ -26,6 +26,8 @@ export const TodoList: React.FC = () => {
   const [newTodoText, setNewTodoText] = useState('');
   const [newTodoLink, setNewTodoLink] = useState('');
   const [newTodoPriority, setNewTodoPriority] = useState<'low' | 'medium' | 'high'>('medium');
+  const [newTodoDue, setNewTodoDue] = useState('');
+  const [currentTime, setCurrentTime] = useState(Date.now());
 
   useEffect(() => {
     const loadTodos = async () => {
@@ -33,6 +35,11 @@ export const TodoList: React.FC = () => {
       setTodos(settings.todos);
     };
     loadTodos();
+  }, []);
+
+  useEffect(() => {
+    const interval = setInterval(() => setCurrentTime(Date.now()), 60000);
+    return () => clearInterval(interval);
   }, []);
 
   const saveTodos = (updatedTodos: Todo[]) => {
@@ -43,16 +50,19 @@ export const TodoList: React.FC = () => {
   const handleAddTodo = () => {
     if (newTodoText.trim() === '') return;
     const link = newTodoLink.trim();
+    const due = newTodoDue.trim();
     const newTodo: Todo = {
       id: crypto.randomUUID(),
       text: newTodoText.trim(),
       completed: false,
       priority: newTodoPriority,
       ...(link && { link }),
+      ...(due && { dueDate: due }),
     };
     saveTodos([...todos, newTodo]);
     setNewTodoText('');
     setNewTodoLink('');
+    setNewTodoDue('');
   };
 
   const handleToggleTodo = (id: string) => {
@@ -71,6 +81,16 @@ export const TodoList: React.FC = () => {
     e: SelectChangeEvent<'low' | 'medium' | 'high'>,
   ) => {
     setNewTodoPriority(e.target.value as 'low' | 'medium' | 'high');
+  };
+
+  const getCountdown = (dueDate: string) => {
+    const diff = new Date(dueDate).getTime() - currentTime;
+    if (diff <= 0) return '0d 0h 0m';
+    const minutes = Math.floor(diff / 60000);
+    const days = Math.floor(minutes / (60 * 24));
+    const hours = Math.floor((minutes % (60 * 24)) / 60);
+    const mins = minutes % 60;
+    return `${days}d ${hours}h ${mins}m`;
   };
 
   return (
@@ -100,6 +120,20 @@ export const TodoList: React.FC = () => {
           fullWidth
           value={newTodoLink}
           onChange={(e) => setNewTodoLink(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              e.preventDefault();
+              handleAddTodo();
+            }
+          }}
+        />
+        <TextField
+          label="Due"
+          type="datetime-local"
+          size="small"
+          value={newTodoDue}
+          onChange={(e) => setNewTodoDue(e.target.value)}
+          InputLabelProps={{ shrink: true }}
           onKeyDown={(e) => {
             if (e.key === 'Enter') {
               e.preventDefault();
@@ -159,6 +193,11 @@ export const TodoList: React.FC = () => {
                     })()}
                   </Typography>
                 </Box>
+              )}
+              {todo.dueDate && (
+                <Typography variant="body2" sx={{ ml: 1 }}>
+                  {getCountdown(todo.dueDate)}
+                </Typography>
               )}
             </ListItemText>
           </ListItem>
