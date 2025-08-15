@@ -19,10 +19,12 @@ import {
 } from '@mui/material';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import DeleteIcon from '@mui/icons-material/Delete';
+import LinkIcon from '@mui/icons-material/Link';
 
 export const TodoList: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [newTodoText, setNewTodoText] = useState('');
+  const [newTodoLink, setNewTodoLink] = useState('');
   const [newTodoPriority, setNewTodoPriority] = useState<'low' | 'medium' | 'high'>('medium');
 
   useEffect(() => {
@@ -40,14 +42,17 @@ export const TodoList: React.FC = () => {
 
   const handleAddTodo = () => {
     if (newTodoText.trim() === '') return;
+    const link = newTodoLink.trim();
     const newTodo: Todo = {
       id: crypto.randomUUID(),
       text: newTodoText.trim(),
       completed: false,
       priority: newTodoPriority,
+      ...(link && { link }),
     };
     saveTodos([...todos, newTodo]);
     setNewTodoText('');
+    setNewTodoLink('');
   };
 
   const handleToggleTodo = (id: string) => {
@@ -88,6 +93,20 @@ export const TodoList: React.FC = () => {
             }
           }}
         />
+        <TextField
+          label="Link"
+          variant="outlined"
+          size="small"
+          fullWidth
+          value={newTodoLink}
+          onChange={(e) => setNewTodoLink(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              e.preventDefault();
+              handleAddTodo();
+            }
+          }}
+        />
         <FormControl size="small" sx={{minWidth: 100}}>
           <InputLabel>Priority</InputLabel>
           <Select
@@ -118,8 +137,29 @@ export const TodoList: React.FC = () => {
               checked={todo.completed}
               onChange={() => handleToggleTodo(todo.id)}
             />
-            <ListItemText sx={{ color: todo.completed ? 'text.secondary' : 'text.primary', textDecoration: todo.completed ? 'line-through' : 'none' }}>
+            <ListItemText sx={{ display: 'flex', alignItems: 'center', color: todo.completed ? 'text.secondary' : 'text.primary', textDecoration: todo.completed ? 'line-through' : 'none' }}>
               {todo.text}
+              {todo.link && (
+                <Box
+                  component="a"
+                  href={todo.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  title={todo.link}
+                  sx={{ display: 'flex', alignItems: 'center', ml: 1 }}
+                >
+                  <LinkIcon fontSize="small" sx={{ mr: 0.5 }} />
+                  <Typography variant="body2">
+                    {(() => {
+                      try {
+                        return new URL(todo.link!).hostname;
+                      } catch {
+                        return todo.link!.slice(0, 30);
+                      }
+                    })()}
+                  </Typography>
+                </Box>
+              )}
             </ListItemText>
           </ListItem>
         ))}

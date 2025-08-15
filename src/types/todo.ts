@@ -8,4 +8,5 @@ export interface Todo {
   text: string;
   completed: boolean;
   priority: 'low' | 'medium' | 'high';
+  link?: string; // Optional URL associated with the todo
 }
